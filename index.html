@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>التحقق من الموظف</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      font-family: "Tahoma", sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 320px;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      text-align: center;
+    }
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #1565c0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>التحقق من الموظف</h2>
+    <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي">
+    <br>
+    <button onclick="checkEmployee()">تحقق</button>
+  </div>
+
+  <script>
+    // 🔹 بيانات Firebase Config الخاصة بك
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLXP89rGzbTMCL8z33ETk1q7JYKsNo3jA",
+      authDomain: "omra-c21a8.firebaseapp.com",
+      projectId: "omra-c21a8",
+      storageBucket: "omra-c21a8.appspot.com",
+      messagingSenderId: "345175863295",
+      appId: "1:345175863295:web:ac26e1ee0460db6c6041ca",
+      measurementId: "G-RSMC9G22D6"
+    };
+
+    // 🔹 تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // 🔹 دالة التحقق
+    async function checkEmployee() {
+      let empId = document.getElementById("empId").value.trim();
+
+      if (!empId) {
+        Swal.fire("تنبيه", "يرجى إدخال رقم التعريف الوظيفي", "warning");
+        return;
+      }
+
+      empId = empId.toString(); // نحوله نص
+
+      try {
+        const docRef = db.collection("employees").doc(empId);
+        const docSnap = await docRef.get();
+
+        if (docSnap.exists) {
+          const data = docSnap.data();
+          Swal.fire({
+            title: "✅ الموظف موجود",
+            html: `
+              <b>الاسم:</b> ${data.name}<br>
+              <b>الرتبة:</b> ${data.grade}<br>
+              <b>مكان العمل:</b> ${data.place}
+            `,
+            icon: "success",
+            confirmButtonText: "الانتقال للتسجيل"
+          }).then(() => {
+            window.location.href = "https://tally.so/r/nr75vL";
+          });
+        } else {
+          Swal.fire("❌ خطأ", "رقم الموظف غير موجود في قاعدة البيانات", "error");
+        }
+      } catch (err) {
+        console.error("خطأ:", err);
+        Swal.fire("خطأ", "حدث خطأ أثناء التحقق", "error");
+      }
+    }
+  </script>
+</body>
+</html>
