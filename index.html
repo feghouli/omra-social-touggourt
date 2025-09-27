@@ -301,8 +301,8 @@
     }
     
     button:active::after {
-      width: 300px;
-      height: 300px;
+      width: 200px;
+      height: 200px;
     }
     
     .loading {
@@ -482,10 +482,6 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    .container:hover {
-      transform: translateY(-2px);
-    }
-    
     /* تأثيرات للعناصر التفاعلية */
     .input-wrapper:hover input {
       border-color: rgba(102, 126, 234, 0.4);
@@ -496,26 +492,9 @@
       color: #764ba2;
     }
     
-    /* تأثيرات للزر */
-    button:active {
-      transform: scale(0.98);
-    }
-    
     /* تأثيرات للخلفية */
     .bg-element-1, .bg-element-2, .bg-element-3 {
       transition: all 0.3s ease;
-    }
-    
-    .container:hover ~ .bg-element-1 {
-      transform: scale(1.1);
-    }
-    
-    .container:hover ~ .bg-element-2 {
-      transform: scale(0.9);
-    }
-    
-    .container:hover ~ .bg-element-3 {
-      transform: scale(1.05);
     }
     
     /* تخصيص SweetAlert2 للعربية */
@@ -608,14 +587,14 @@
   <div class="bg-element-1"></div>
   <div class="bg-element-2"></div>
   <div class="bg-element-3"></div>
-  
+
   <div class="container">
     <h2>التحقق من رقم التعريف الوظيفي</h2>
     <p class="subtitle">أدخل رقم التعريف للتحقق من البيانات</p>
     
     <div class="input-group">
       <div class="input-wrapper">
-        <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي">
+    <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي">
         <div class="input-focus-effect"></div>
         <i class="fas fa-user input-icon"></i>
       </div>
@@ -736,38 +715,28 @@
         if (this.value.length > 0) {
           this.style.borderColor = '#667eea';
           this.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 25px rgba(102, 126, 234, 0.2)';
-          inputWrapper.style.transform = 'scale(1.02)';
         } else {
           this.style.borderColor = 'rgba(102, 126, 234, 0.2)';
           this.style.boxShadow = 'none';
-          inputWrapper.style.transform = 'scale(1)';
         }
       });
       
       // تأثيرات التركيز
       input.addEventListener('focus', function() {
-        inputWrapper.style.transform = 'scale(1.02)';
-        container.style.transform = 'translateY(-2px)';
+        // تم إزالة تأثيرات التكبير
       });
       
       input.addEventListener('blur', function() {
-        if (this.value.length === 0) {
-          inputWrapper.style.transform = 'scale(1)';
-        }
-        container.style.transform = 'translateY(0)';
+        // تم إزالة تأثيرات التكبير
       });
       
       // تأثيرات للزر
       button.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px) scale(1.02)';
-        container.style.transform = 'translateY(-3px)';
+        // تم إزالة تأثيرات التكبير
       });
       
       button.addEventListener('mouseleave', function() {
-        if (!this.classList.contains('loading')) {
-          this.style.transform = 'translateY(0) scale(1)';
-          container.style.transform = 'translateY(0)';
-        }
+        // تم إزالة تأثيرات التكبير
       });
       
       // تأثير عند الضغط على Enter
@@ -777,18 +746,7 @@
         }
       });
       
-      // تأثيرات للخلفية عند التفاعل
-      container.addEventListener('mouseenter', function() {
-        document.querySelectorAll('.bg-element-1, .bg-element-2, .bg-element-3').forEach(el => {
-          el.style.transform = 'scale(1.1)';
-        });
-      });
-      
-      container.addEventListener('mouseleave', function() {
-        document.querySelectorAll('.bg-element-1, .bg-element-2, .bg-element-3').forEach(el => {
-          el.style.transform = 'scale(1)';
-        });
-      });
+      // تم إزالة تأثيرات التكبير للخلفية
       
       // تأثيرات إضافية للصفحة
       document.body.style.opacity = '0';
