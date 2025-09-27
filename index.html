@@ -18,8 +18,6 @@
     body {
       font-family: 'Cairo', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,20 +26,13 @@
       position: relative;
     }
     
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    /* دوائر خلفية متحركة محسنة */
+    /* دوائر خلفية ثابتة */
     body::before, body::after {
       content: '';
       position: absolute;
       border-radius: 50%;
       background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
       backdrop-filter: blur(10px);
-      animation: float 20s infinite linear;
       z-index: 0;
     }
     
@@ -50,7 +41,6 @@
       height: 400px; 
       top: -100px; 
       left: -100px;
-      animation-duration: 25s;
     }
     
     body::after {
@@ -58,35 +48,6 @@
       height: 300px; 
       bottom: -100px; 
       right: -100px;
-      animation-duration: 30s;
-      animation-direction: reverse;
-    }
-    
-    /* دوائر إضافية للخلفية */
-    body::after {
-      content: '';
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      background: linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
-      border-radius: 50%;
-      top: 20%;
-      right: 10%;
-      animation: pulse 4s ease-in-out infinite;
-      z-index: 0;
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0deg) scale(1); }
-      25% { transform: translateY(-30px) rotate(90deg) scale(1.1); }
-      50% { transform: translateY(-60px) rotate(180deg) scale(0.9); }
-      75% { transform: translateY(-30px) rotate(270deg) scale(1.1); }
-      100% { transform: translateY(0) rotate(360deg) scale(1); }
-    }
-    
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.7; }
-      50% { transform: scale(1.2); opacity: 0.3; }
     }
     
     .container {
@@ -103,19 +64,7 @@
       width: 420px;
       max-width: 90vw;
       z-index: 1;
-      animation: slideInUp 0.8s ease-out;
       border: 1px solid rgba(255,255,255,0.3);
-    }
-    
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(50px) scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
     }
     
     h2 {
@@ -166,7 +115,6 @@
       box-shadow: 
         0 0 0 4px rgba(102, 126, 234, 0.1),
         0 8px 25px rgba(102, 126, 234, 0.3);
-      transform: translateY(-2px);
     }
     
     input::placeholder {
@@ -214,7 +162,6 @@
     }
     
     button:hover {
-      transform: translateY(-4px) scale(1.02);
       box-shadow: 
         0 15px 35px rgba(102, 126, 234, 0.4),
         0 0 0 1px rgba(255,255,255,0.2);
@@ -222,10 +169,6 @@
     
     button:hover::before {
       left: 100%;
-    }
-    
-    button:active {
-      transform: translateY(-2px) scale(0.98);
     }
     
     .loading {
@@ -273,7 +216,6 @@
     
     /* تأثيرات إضافية */
     .container:hover {
-      transform: translateY(-5px);
       box-shadow: 
         0 35px 80px rgba(0,0,0,0.2),
         0 0 0 1px rgba(255,255,255,0.3),
@@ -303,14 +245,6 @@
     }
     
     /* تأثيرات إضافية للصفحة */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    body {
-      animation: fadeIn 1s ease-out;
-    }
     
     /* تحسين الخطوط */
     input, button {
@@ -434,10 +368,8 @@
       input.addEventListener('input', function() {
         if (this.value.length > 0) {
           this.style.borderColor = '#667eea';
-          this.style.transform = 'scale(1.02)';
         } else {
           this.style.borderColor = 'rgba(102, 126, 234, 0.2)';
-          this.style.transform = 'scale(1)';
         }
       });
       
@@ -448,16 +380,7 @@
         }
       });
       
-      // تأثير عند التركيز على الزر
-      button.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-4px) scale(1.02)';
-      });
-      
-      button.addEventListener('mouseleave', function() {
-        if (!this.classList.contains('loading')) {
-          this.style.transform = 'translateY(0) scale(1)';
-        }
-      });
+      // تأثير عند التركيز على الزر - تم إزالة الحركات
     });
   </script>
 </body>
