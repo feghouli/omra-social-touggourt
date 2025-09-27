@@ -6,7 +6,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
     * { 
@@ -17,7 +18,11 @@
     
     body {
       font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #4facfe 100%);
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,82 +33,206 @@
       padding: 0;
     }
     
-    /* دوائر خلفية ثابتة */
+    /* عناصر خلفية إبداعية */
     body::before, body::after {
       content: '';
       position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
       z-index: 0;
     }
     
     body::before {
-      width: 300px; 
-      height: 300px; 
-      top: -50px; 
-      right: -50px;
+      width: 400px; 
+      height: 400px; 
+      top: -100px; 
+      right: -100px;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border-radius: 50%;
+      filter: blur(40px);
     }
     
     body::after {
-      width: 200px; 
-      height: 200px; 
-      bottom: -30px; 
-      left: -30px;
+      width: 300px; 
+      height: 300px; 
+      bottom: -80px; 
+      left: -80px;
+      background: linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border-radius: 50%;
+      filter: blur(30px);
+    }
+    
+    /* عناصر إضافية للخلفية */
+    .bg-element-1, .bg-element-2, .bg-element-3 {
+      position: absolute;
+      border-radius: 50%;
+      z-index: 0;
+    }
+    
+    .bg-element-1 {
+      width: 150px;
+      height: 150px;
+      top: 15%;
+      left: 10%;
+      background: linear-gradient(45deg, rgba(255,255,255,0.06), transparent);
+      filter: blur(20px);
+    }
+    
+    .bg-element-2 {
+      width: 100px;
+      height: 100px;
+      top: 60%;
+      right: 20%;
+      background: linear-gradient(45deg, rgba(255,255,255,0.08), transparent);
+      filter: blur(15px);
+    }
+    
+    .bg-element-3 {
+      width: 80px;
+      height: 80px;
+      top: 30%;
+      left: 70%;
+      background: linear-gradient(45deg, rgba(255,255,255,0.05), transparent);
+      filter: blur(10px);
     }
     
     .container {
       position: relative;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-      padding: 40px 30px;
-      border-radius: 20px;
+      background: 
+        linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      backdrop-filter: blur(20px);
+      padding: 50px 40px;
+      border-radius: 30px;
       box-shadow: 
-        0 15px 40px rgba(0,0,0,0.1),
-        0 0 0 1px rgba(255,255,255,0.3);
+        0 25px 60px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(255,255,255,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.6);
       text-align: center;
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       margin: 20px;
-      z-index: 1;
-      border: 1px solid rgba(255,255,255,0.5);
+      z-index: 10;
+      border: 1px solid rgba(255,255,255,0.6);
+      overflow: hidden;
+    }
+    
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    }
+    
+    .container::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      z-index: -1;
     }
     
     h2 {
-      margin-bottom: 30px;
-      font-weight: 700;
-      font-size: 24px;
-      color: #333;
+      margin-bottom: 40px;
+      font-weight: 800;
+      font-size: 28px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       text-align: center;
-      line-height: 1.3;
+      line-height: 1.4;
+      position: relative;
+      letter-spacing: -0.5px;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
+      border-radius: 2px;
+      opacity: 0.8;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 35px;
+      font-weight: 400;
+      opacity: 0.8;
     }
     
     .input-group {
       position: relative;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
+    }
+    
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
     }
     
     input {
       width: 100%;
-      padding: 15px 20px;
-      border-radius: 12px;
-      border: 2px solid #e0e0e0;
+      padding: 18px 50px 18px 20px;
+      border-radius: 15px;
+      border: 2px solid rgba(102, 126, 234, 0.2);
       font-size: 16px;
-      text-align: center;
-      transition: all 0.3s ease;
-      background: #fff;
+      text-align: right;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.9);
       font-weight: 500;
       box-sizing: border-box;
+      backdrop-filter: blur(10px);
+    }
+    
+    .input-icon {
+      position: absolute;
+      right: 18px;
+      color: #667eea;
+      font-size: 18px;
+      pointer-events: none;
+      z-index: 2;
     }
     
     input:focus {
       outline: none;
       border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 
+        0 0 0 4px rgba(102, 126, 234, 0.1),
+        0 8px 25px rgba(102, 126, 234, 0.2);
+      background: rgba(255, 255, 255, 0.95);
     }
     
     input::placeholder {
-      color: #999;
+      color: rgba(102, 126, 234, 0.5);
       font-weight: 400;
+    }
+    
+    .input-focus-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    input:focus + .input-focus-effect {
+      opacity: 1;
     }
     
     .icon {
@@ -117,19 +246,22 @@
     }
     
     button {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
       color: white;
       border: none;
-      padding: 15px 0;
-      border-radius: 12px;
-      font-size: 16px;
+      padding: 18px 0;
+      border-radius: 15px;
+      font-size: 17px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       width: 100%;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 8px 25px rgba(102, 126, 234, 0.3),
+        0 0 0 1px rgba(255,255,255,0.1);
       position: relative;
       overflow: hidden;
+      letter-spacing: 0.5px;
     }
     
     button::before {
@@ -139,16 +271,36 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.6s ease;
     }
     
     button:hover {
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 
+        0 12px 35px rgba(102, 126, 234, 0.4),
+        0 0 0 1px rgba(255,255,255,0.2);
     }
     
     button:hover::before {
       left: 100%;
+    }
+    
+    button:active::after {
+      width: 300px;
+      height: 300px;
     }
     
     .loading {
@@ -178,54 +330,143 @@
     /* تحسينات للشاشات الصغيرة */
     @media (max-width: 768px) {
       body {
-        padding: 10px;
+        padding: 15px;
       }
       
       .container {
-        padding: 30px 20px;
+        padding: 40px 30px;
         margin: 10px;
-        border-radius: 15px;
+        border-radius: 25px;
         max-width: 100%;
       }
       
       h2 {
-        font-size: 20px;
-        margin-bottom: 25px;
-        line-height: 1.4;
+        font-size: 24px;
+        margin-bottom: 30px;
+        line-height: 1.3;
       }
       
-      input, button {
-        padding: 14px 16px;
+      .subtitle {
+        font-size: 13px;
+        margin-bottom: 30px;
+      }
+      
+      input {
+        padding: 16px 45px 16px 18px;
+        font-size: 16px;
+      }
+      
+      button {
+        padding: 16px 0;
         font-size: 16px;
       }
       
       .input-group {
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+      }
+      
+      .bg-element-1, .bg-element-2, .bg-element-3 {
+        display: none;
       }
     }
     
     @media (max-width: 480px) {
       .container {
-        padding: 25px 15px;
+        padding: 35px 25px;
         margin: 5px;
+        border-radius: 20px;
       }
       
       h2 {
-        font-size: 18px;
-        margin-bottom: 20px;
+        font-size: 22px;
+        margin-bottom: 25px;
       }
       
-      input, button {
-        padding: 12px 14px;
+      .subtitle {
+        font-size: 12px;
+        margin-bottom: 25px;
+      }
+      
+      input {
+        padding: 14px 40px 14px 16px;
         font-size: 15px;
+      }
+      
+      button {
+        padding: 14px 0;
+        font-size: 15px;
+      }
+      
+      .input-icon {
+        right: 15px;
+        font-size: 16px;
+      }
+    }
+    
+    /* تحسينات للشاشات الكبيرة */
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 500px;
+        padding: 60px 50px;
+      }
+      
+      h2 {
+        font-size: 32px;
+        margin-bottom: 45px;
+      }
+      
+      .subtitle {
+        font-size: 16px;
+        margin-bottom: 40px;
       }
     }
     
     /* تأثيرات إضافية */
     .container:hover {
       box-shadow: 
-        0 20px 50px rgba(0,0,0,0.15),
-        0 0 0 1px rgba(255,255,255,0.4);
+        0 30px 70px rgba(0,0,0,0.2),
+        0 0 0 1px rgba(255,255,255,0.5);
+    }
+    
+    /* تأثيرات خاصة للعناصر */
+    .container {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .container:hover {
+      transform: translateY(-2px);
+    }
+    
+    /* تأثيرات للعناصر التفاعلية */
+    .input-wrapper:hover input {
+      border-color: rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+    }
+    
+    .input-wrapper:hover .input-icon {
+      color: #764ba2;
+    }
+    
+    /* تأثيرات للزر */
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    /* تأثيرات للخلفية */
+    .bg-element-1, .bg-element-2, .bg-element-3 {
+      transition: all 0.3s ease;
+    }
+    
+    .container:hover ~ .bg-element-1 {
+      transform: scale(1.1);
+    }
+    
+    .container:hover ~ .bg-element-2 {
+      transform: scale(0.9);
+    }
+    
+    .container:hover ~ .bg-element-3 {
+      transform: scale(1.05);
     }
     
     /* تخصيص SweetAlert2 للعربية */
@@ -260,12 +501,26 @@
 </head>
 <body>
 
+  <div class="bg-element-1"></div>
+  <div class="bg-element-2"></div>
+  <div class="bg-element-3"></div>
+  
   <div class="container">
     <h2>واجهة التحقق من رقم التعريف الوظيفي للموظف</h2>
+    <p class="subtitle">أدخل رقم التعريف الوظيفي للتحقق من صحة البيانات</p>
+    
     <div class="input-group">
-      <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي">
+      <div class="input-wrapper">
+        <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي">
+        <div class="input-focus-effect"></div>
+        <i class="fas fa-user input-icon"></i>
+      </div>
     </div>
-    <button onclick="checkEmployee()" id="checkBtn">تحقق</button>
+    
+    <button onclick="checkEmployee()" id="checkBtn">
+      <i class="fas fa-search" style="margin-left: 8px;"></i>
+      تحقق من البيانات
+    </button>
   </div>
 
   <script>
@@ -300,7 +555,7 @@
       
       // إضافة حالة التحميل
       checkBtn.classList.add('loading');
-      checkBtn.textContent = 'جاري التحقق...';
+      checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-left: 8px;"></i>جاري التحقق...';
       
       empId = empId.toString();
       
@@ -361,21 +616,53 @@
       } finally {
         // إزالة حالة التحميل
         checkBtn.classList.remove('loading');
-        checkBtn.textContent = 'تحقق';
+        checkBtn.innerHTML = '<i class="fas fa-search" style="margin-left: 8px;"></i>تحقق من البيانات';
       }
     }
     
-    // إضافة تأثيرات تفاعلية للعناصر
+    // إضافة تأثيرات تفاعلية متقدمة
     document.addEventListener('DOMContentLoaded', function() {
       const input = document.getElementById('empId');
       const button = document.getElementById('checkBtn');
+      const inputWrapper = document.querySelector('.input-wrapper');
+      const container = document.querySelector('.container');
       
-      // تأثير عند الكتابة في حقل الإدخال
+      // تأثيرات متقدمة لحقل الإدخال
       input.addEventListener('input', function() {
         if (this.value.length > 0) {
           this.style.borderColor = '#667eea';
+          this.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 25px rgba(102, 126, 234, 0.2)';
+          inputWrapper.style.transform = 'scale(1.02)';
         } else {
           this.style.borderColor = 'rgba(102, 126, 234, 0.2)';
+          this.style.boxShadow = 'none';
+          inputWrapper.style.transform = 'scale(1)';
+        }
+      });
+      
+      // تأثيرات التركيز
+      input.addEventListener('focus', function() {
+        inputWrapper.style.transform = 'scale(1.02)';
+        container.style.transform = 'translateY(-2px)';
+      });
+      
+      input.addEventListener('blur', function() {
+        if (this.value.length === 0) {
+          inputWrapper.style.transform = 'scale(1)';
+        }
+        container.style.transform = 'translateY(0)';
+      });
+      
+      // تأثيرات للزر
+      button.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px) scale(1.02)';
+        container.style.transform = 'translateY(-3px)';
+      });
+      
+      button.addEventListener('mouseleave', function() {
+        if (!this.classList.contains('loading')) {
+          this.style.transform = 'translateY(0) scale(1)';
+          container.style.transform = 'translateY(0)';
         }
       });
       
@@ -386,7 +673,25 @@
         }
       });
       
-      // تأثير عند التركيز على الزر - تم إزالة الحركات
+      // تأثيرات للخلفية عند التفاعل
+      container.addEventListener('mouseenter', function() {
+        document.querySelectorAll('.bg-element-1, .bg-element-2, .bg-element-3').forEach(el => {
+          el.style.transform = 'scale(1.1)';
+        });
+      });
+      
+      container.addEventListener('mouseleave', function() {
+        document.querySelectorAll('.bg-element-1, .bg-element-2, .bg-element-3').forEach(el => {
+          el.style.transform = 'scale(1)';
+        });
+      });
+      
+      // تأثيرات إضافية للصفحة
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.transition = 'opacity 0.8s ease';
+        document.body.style.opacity = '1';
+      }, 100);
     });
   </script>
 </body>
