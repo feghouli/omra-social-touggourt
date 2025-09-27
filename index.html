@@ -2,608 +2,100 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>واجهة التحقق من رقم التعريف الوظيفي للموظف</title>
+  <title>التحقق من الموظف</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-    }
-    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Cairo', sans-serif;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
+      height: 100vh;
+      overflow: hidden;
     }
-    
-    /* عناصر خلفية إبداعية */
+    /* دوائر خلفية متحركة */
     body::before, body::after {
       content: '';
       position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      animation: float 15s infinite linear;
       z-index: 0;
     }
-    
     body::before {
-      width: 400px; 
-      height: 400px; 
-      top: -100px; 
-      right: -100px;
-      background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-      border-radius: 50%;
-      filter: blur(40px);
+      width: 300px; height: 300px; top: -50px; left: -50px;
     }
-    
     body::after {
-      width: 300px; 
-      height: 300px; 
-      bottom: -80px; 
-      left: -80px;
-      background: linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-      border-radius: 50%;
-      filter: blur(30px);
+      width: 200px; height: 200px; bottom: -50px; right: -50px;
+      animation-duration: 20s;
     }
-    
-    /* عناصر إضافية للخلفية */
-    .bg-element-1, .bg-element-2, .bg-element-3 {
-      position: absolute;
-      border-radius: 50%;
-      z-index: 0;
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-50px) rotate(180deg); }
+      100% { transform: translateY(0) rotate(360deg); }
     }
-    
-    .bg-element-1 {
-      width: 150px;
-      height: 150px;
-      top: 15%;
-      left: 10%;
-      background: linear-gradient(45deg, rgba(255,255,255,0.06), transparent);
-      filter: blur(20px);
-    }
-    
-    .bg-element-2 {
-      width: 100px;
-      height: 100px;
-      top: 60%;
-      right: 20%;
-      background: linear-gradient(45deg, rgba(255,255,255,0.08), transparent);
-      filter: blur(15px);
-    }
-    
-    .bg-element-3 {
-      width: 80px;
-      height: 80px;
-      top: 30%;
-      left: 70%;
-      background: linear-gradient(45deg, rgba(255,255,255,0.05), transparent);
-      filter: blur(10px);
-    }
-    
     .container {
       position: relative;
-      background: 
-        linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
-      backdrop-filter: blur(20px);
-      padding: 35px 25px;
+      background: white;
+      padding: 50px 35px;
       border-radius: 20px;
-      box-shadow: 
-        0 20px 50px rgba(0,0,0,0.15),
-        0 0 0 1px rgba(255,255,255,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.6);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
       text-align: center;
-      width: 100%;
-      max-width: 380px;
-      margin: 0 auto;
-      z-index: 10;
-      border: 1px solid rgba(255,255,255,0.6);
-      overflow: hidden;
+      width: 380px;
+      z-index: 1;
     }
-    
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-    }
-    
-    .container::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      z-index: -1;
-    }
-    
     h2 {
-      margin-bottom: 25px;
-      font-weight: 800;
-      font-size: 22px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-align: center;
-      line-height: 1.3;
-      position: relative;
-      letter-spacing: -0.5px;
+      margin-bottom: 30px;
+      font-weight: 700;
+      font-size: 26px;
+      color: #333;
     }
-    
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
-      border-radius: 2px;
-      opacity: 0.8;
-    }
-    
-    .subtitle {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 25px;
-      font-weight: 400;
-      opacity: 0.8;
-    }
-    
-    .input-group {
-      position: relative;
-      margin-bottom: 25px;
-    }
-    
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    
     input {
       width: 100%;
-      padding: 14px 40px 14px 16px;
-      border-radius: 10px;
-      border: 2px solid rgba(102, 126, 234, 0.2);
-      font-size: 15px;
-      text-align: right;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      background: rgba(255, 255, 255, 0.9);
-      font-weight: 500;
-      box-sizing: border-box;
-      backdrop-filter: blur(10px);
+      padding: 14px;
+      margin-bottom: 25px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      text-align: center;
+      transition: all 0.3s;
     }
-    
-    .input-icon {
-      position: absolute;
-      right: 14px;
-      color: #667eea;
-      font-size: 15px;
-      pointer-events: none;
-      z-index: 2;
-    }
-    
     input:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 
-        0 0 0 4px rgba(102, 126, 234, 0.1),
-        0 8px 25px rgba(102, 126, 234, 0.2);
-      background: rgba(255, 255, 255, 0.95);
+      border-color: #2575fc;
+      box-shadow: 0 0 10px rgba(37,117,252,0.5);
     }
-    
-    input::placeholder {
-      color: rgba(102, 126, 234, 0.5);
-      font-weight: 400;
-    }
-    
-    .input-focus-effect {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 15px;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-    
-    input:focus + .input-focus-effect {
-      opacity: 1;
-    }
-    
-    .icon {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #667eea;
-      font-size: 18px;
-      pointer-events: none;
-    }
-    
     button {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4facfe 100%);
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
       color: white;
       border: none;
       padding: 14px 0;
-      border-radius: 10px;
-      font-size: 15px;
+      border-radius: 12px;
+      font-size: 18px;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 600;
       width: 100%;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 
-        0 6px 20px rgba(102, 126, 234, 0.3),
-        0 0 0 1px rgba(255,255,255,0.1);
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.5px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-    
-    button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.6s ease;
-    }
-    
-    button::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      background: rgba(255,255,255,0.2);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: all 0.6s ease;
-    }
-    
     button:hover {
-      box-shadow: 
-        0 12px 35px rgba(102, 126, 234, 0.4),
-        0 0 0 1px rgba(255,255,255,0.2);
-    }
-    
-    button:hover::before {
-      left: 100%;
-    }
-    
-    button:active::after {
-      width: 200px;
-      height: 200px;
-    }
-    
-    .loading {
-      opacity: 0.7;
-      pointer-events: none;
-    }
-    
-    .loading::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top: 2px solid white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    
-    /* تحسينات للهواتف المحمولة */
-    @media (max-width: 768px) {
-      body {
-        padding: 8px;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
-      .container {
-        padding: 20px 15px;
-        margin: 0 auto;
-        border-radius: 15px;
-        max-width: 100%;
-        width: 100%;
-        box-sizing: border-box;
-      }
-      
-      h2 {
-        font-size: 16px;
-        margin-bottom: 15px;
-        line-height: 1.2;
-        word-break: break-word;
-      }
-      
-      .subtitle {
-        font-size: 10px;
-        margin-bottom: 15px;
-        line-height: 1.3;
-      }
-      
-      input {
-        padding: 10px 30px 10px 12px;
-        font-size: 13px;
-        border-radius: 8px;
-      }
-      
-      button {
-        padding: 10px 0;
-        font-size: 13px;
-        border-radius: 8px;
-      }
-      
-      .input-group {
-        margin-bottom: 15px;
-      }
-      
-      .input-icon {
-        right: 10px;
-        font-size: 13px;
-      }
-      
-      .bg-element-1, .bg-element-2, .bg-element-3 {
-        display: none;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      body {
-        padding: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
-      .container {
-        padding: 15px 12px;
-        border-radius: 12px;
-        margin: 0 auto;
-        box-sizing: border-box;
-      }
-      
-      h2 {
-        font-size: 14px;
-        margin-bottom: 12px;
-        line-height: 1.2;
-        word-break: break-word;
-      }
-      
-      .subtitle {
-        font-size: 9px;
-        margin-bottom: 12px;
-        line-height: 1.3;
-      }
-      
-      input {
-        padding: 8px 25px 8px 10px;
-        font-size: 12px;
-        border-radius: 6px;
-      }
-      
-      button {
-        padding: 8px 0;
-        font-size: 12px;
-        border-radius: 6px;
-      }
-      
-      .input-icon {
-        right: 8px;
-        font-size: 12px;
-      }
-      
-      .input-group {
-        margin-bottom: 12px;
-      }
-    }
-    
-    /* تحسينات للشاشات الكبيرة */
-    @media (min-width: 1200px) {
-      .container {
-        max-width: 500px;
-        padding: 60px 50px;
-      }
-      
-      h2 {
-        font-size: 32px;
-        margin-bottom: 45px;
-      }
-      
-      .subtitle {
-        font-size: 16px;
-        margin-bottom: 40px;
-      }
-    }
-    
-    /* ضمان التوسيط الكامل */
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      width: 100%;
-    }
-    
-    /* تأثيرات إضافية */
-    .container:hover {
-      box-shadow: 
-        0 30px 70px rgba(0,0,0,0.2),
-        0 0 0 1px rgba(255,255,255,0.5);
-    }
-    
-    /* تأثيرات خاصة للعناصر */
-    .container {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    /* تأثيرات للعناصر التفاعلية */
-    .input-wrapper:hover input {
-      border-color: rgba(102, 126, 234, 0.4);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
-    }
-    
-    .input-wrapper:hover .input-icon {
-      color: #764ba2;
-    }
-    
-    /* تأثيرات للخلفية */
-    .bg-element-1, .bg-element-2, .bg-element-3 {
-      transition: all 0.3s ease;
-    }
-    
-    /* تخصيص SweetAlert2 للعربية */
-    .swal2-popup-ar {
-      font-family: 'Cairo', sans-serif !important;
-      direction: rtl !important;
-      text-align: right !important;
-    }
-    
-    .swal2-popup-ar .swal2-title {
-      font-family: 'Cairo', sans-serif !important;
-      font-weight: 700 !important;
-    }
-    
-    .swal2-popup-ar .swal2-content {
-      font-family: 'Cairo', sans-serif !important;
-    }
-    
-    .swal2-popup-ar .swal2-confirm {
-      font-family: 'Cairo', sans-serif !important;
-      font-weight: 600 !important;
-      border-radius: 10px !important;
-    }
-    
-    /* تصغير SweetAlert2 للهواتف */
-    @media (max-width: 768px) {
-      .swal2-popup {
-        width: 90% !important;
-        max-width: 350px !important;
-        padding: 20px !important;
-      }
-      
-      .swal2-title {
-        font-size: 18px !important;
-        margin-bottom: 15px !important;
-      }
-      
-      .swal2-content {
-        font-size: 14px !important;
-        margin-bottom: 20px !important;
-      }
-      
-      .swal2-confirm {
-        font-size: 14px !important;
-        padding: 10px 20px !important;
-      }
-      
-      .swal2-html-container {
-        font-size: 13px !important;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .swal2-popup {
-        width: 95% !important;
-        max-width: 300px !important;
-        padding: 15px !important;
-      }
-      
-      .swal2-title {
-        font-size: 16px !important;
-        margin-bottom: 12px !important;
-      }
-      
-      .swal2-content {
-        font-size: 13px !important;
-        margin-bottom: 15px !important;
-      }
-      
-      .swal2-confirm {
-        font-size: 13px !important;
-        padding: 8px 16px !important;
-      }
-      
-      .swal2-html-container {
-        font-size: 12px !important;
-      }
-    }
-    
-    /* تأثيرات إضافية للصفحة */
-    
-    /* تحسين الخطوط */
-    input, button {
-      font-family: 'Cairo', sans-serif;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-element-1"></div>
-  <div class="bg-element-2"></div>
-  <div class="bg-element-3"></div>
-
   <div class="container">
-    <h2>التحقق من رقم التعريف الوظيفي</h2>
-    <p class="subtitle">أدخل رقم التعريف للتحقق من البيانات</p>
-    
-    <div class="input-group">
-      <div class="input-wrapper">
+    <h2>التحقق من الموظف</h2>
     <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي">
-        <div class="input-focus-effect"></div>
-        <i class="fas fa-user input-icon"></i>
-      </div>
-    </div>
-    
-    <button onclick="checkEmployee()" id="checkBtn">
-      <i class="fas fa-search" style="margin-left: 8px;"></i>
-      تحقق
-    </button>
+    <button onclick="checkEmployee()">تحقق</button>
   </div>
 
   <script>
@@ -621,140 +113,29 @@
 
     async function checkEmployee() {
       let empId = document.getElementById("empId").value.trim();
-      const checkBtn = document.getElementById("checkBtn");
-      
-      if (!empId) { 
-        Swal.fire({
-          title: "تنبيه",
-          text: "يرجى إدخال رقم التعريف الوظيفي",
-          icon: "warning",
-          confirmButtonText: "حسناً",
-          customClass: {
-            popup: 'swal2-popup-ar'
-          }
-        }); 
-        return; 
-      }
-      
-      // إضافة حالة التحميل
-      checkBtn.classList.add('loading');
-      checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-left: 8px;"></i>جاري التحقق...';
-      
+      if (!empId) { Swal.fire("تنبيه", "يرجى إدخال رقم التعريف الوظيفي", "warning"); return; }
       empId = empId.toString();
-      
       try {
         const docRef = db.collection("employees").doc(empId);
         const docSnap = await docRef.get();
-        
         if (docSnap.exists) {
           const data = docSnap.data();
           Swal.fire({
-            title: "✅ تم العثور على الموظف",
-            html: `
-              <div style="text-align: right; font-family: 'Cairo', sans-serif;">
-                <div style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                  <strong>الاسم:</strong> ${data.name}
-                </div>
-                <div style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                  <strong>الرتبة:</strong> ${data.grade}
-                </div>
-                <div style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                  <strong>مكان العمل:</strong> ${data.place}
-                </div>
-              </div>
-            `,
+            title: "✅ الموظف موجود",
+            html: `<b>الاسم:</b> ${data.name}<br><b>الرتبة:</b> ${data.grade}<br><b>مكان العمل:</b> ${data.place}`,
             icon: "success",
-            confirmButtonText: "الانتقال للتسجيل",
-            confirmButtonColor: "#667eea",
-            customClass: {
-              popup: 'swal2-popup-ar'
-            }
+            confirmButtonText: "الانتقال للتسجيل"
           }).then(() => {
             window.location.href = "https://tally.so/r/nr75vL";
           });
         } else {
-          Swal.fire({
-            title: "❌ خطأ",
-            text: "رقم الموظف غير موجود في قاعدة البيانات",
-            icon: "error",
-            confirmButtonText: "حسناً",
-            confirmButtonColor: "#dc3545",
-            customClass: {
-              popup: 'swal2-popup-ar'
-            }
-          });
+          Swal.fire("❌ خطأ", "رقم الموظف غير موجود في قاعدة البيانات", "error");
         }
       } catch (err) {
         console.error("خطأ:", err);
-        Swal.fire({
-          title: "خطأ",
-          text: "حدث خطأ أثناء التحقق من البيانات",
-          icon: "error",
-          confirmButtonText: "حسناً",
-          confirmButtonColor: "#dc3545",
-          customClass: {
-            popup: 'swal2-popup-ar'
-          }
-        });
-      } finally {
-        // إزالة حالة التحميل
-        checkBtn.classList.remove('loading');
-        checkBtn.innerHTML = '<i class="fas fa-search" style="margin-left: 8px;"></i>تحقق';
+        Swal.fire("خطأ", "حدث خطأ أثناء التحقق", "error");
       }
     }
-    
-    // إضافة تأثيرات تفاعلية متقدمة
-    document.addEventListener('DOMContentLoaded', function() {
-      const input = document.getElementById('empId');
-      const button = document.getElementById('checkBtn');
-      const inputWrapper = document.querySelector('.input-wrapper');
-      const container = document.querySelector('.container');
-      
-      // تأثيرات متقدمة لحقل الإدخال
-      input.addEventListener('input', function() {
-        if (this.value.length > 0) {
-          this.style.borderColor = '#667eea';
-          this.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 25px rgba(102, 126, 234, 0.2)';
-        } else {
-          this.style.borderColor = 'rgba(102, 126, 234, 0.2)';
-          this.style.boxShadow = 'none';
-        }
-      });
-      
-      // تأثيرات التركيز
-      input.addEventListener('focus', function() {
-        // تم إزالة تأثيرات التكبير
-      });
-      
-      input.addEventListener('blur', function() {
-        // تم إزالة تأثيرات التكبير
-      });
-      
-      // تأثيرات للزر
-      button.addEventListener('mouseenter', function() {
-        // تم إزالة تأثيرات التكبير
-      });
-      
-      button.addEventListener('mouseleave', function() {
-        // تم إزالة تأثيرات التكبير
-      });
-      
-      // تأثير عند الضغط على Enter
-      input.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          checkEmployee();
-        }
-      });
-      
-      // تم إزالة تأثيرات التكبير للخلفية
-      
-      // تأثيرات إضافية للصفحة
-      document.body.style.opacity = '0';
-      setTimeout(() => {
-        document.body.style.transition = 'opacity 0.8s ease';
-        document.body.style.opacity = '1';
-      }, 100);
-    });
   </script>
 </body>
 </html>
