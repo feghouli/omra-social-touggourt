@@ -153,7 +153,7 @@
 
   <div class="container">
     <h2>التحقق من الرقم التعريف الوظيفي للموظف</h2>
-    <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي" maxlength="16" inputmode="numeric" oninput="validateNumber(this)">
+    <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي" oninput="validateNumber(this)">
     <button onclick="checkEmployee()">تحقق</button>
   </div>
 
@@ -171,9 +171,12 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ✅ السماح فقط بالأرقام حتى 16 رقم
+    // ✅ منع إدخال غير الأرقام وتحديد الطول الأقصى بـ 16 رقمًا
     function validateNumber(input) {
-      input.value = input.value.replace(/\D/g, '').slice(0, 16);
+      input.value = input.value.replace(/\D/g, ''); // حذف أي شيء غير رقمي
+      if (input.value.length > 16) {
+        input.value = input.value.slice(0, 16); // قص الزائد بعد 16 رقم
+      }
     }
 
     async function checkEmployee() {
