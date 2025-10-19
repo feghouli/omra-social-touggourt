@@ -112,7 +112,7 @@
         }
       } catch (err) {
         console.error(err);
-        Swal.fire("خطأ", "حدث خطأ أثناء الاتصال بقاعدة البيانات", "error");
+        Swal.fire("خطأ", "حدث خطأ أثناء الاتصال بقاعدة البيانات أعد المحاولة", "error");
       }
     }
 
@@ -126,7 +126,7 @@
     <input type="text" id="placeField" value="${data.place}" readonly>
 
     <select id="daairaField" onchange="updateBaladiya()">
-      <option value="">اختر الدائرة</option>
+      <option value="">اختر دائرة العمل</option>
       <option value="توقرت">توقرت</option>
       <option value="تماسين">تماسين</option>
       <option value="المقارين">المقارين</option>
@@ -135,7 +135,7 @@
     </select>
 
     <select id="baladiyaField">
-      <option value="">اختر البلدية</option>
+      <option value="">اختر بلدية العمل</option>
     </select>
 
     <input type="text" id="phoneField" placeholder="رقم الهاتف (10 أرقام)" oninput="validatePhone(this)">
@@ -238,3 +238,4 @@ function updateBaladiya() {
   </script>
 </body>
 </html>
+
