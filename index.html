@@ -158,7 +158,7 @@ function updateBaladiya() {
   const baladiyaSelect = document.getElementById("baladiyaField");
 
   // مسح الخيارات القديمة
-  baladiyaSelect.innerHTML = '<option value="">اختر البلدية</option>';
+  baladiyaSelect.innerHTML = '<option value="">اختر بلدية العمل</option>';
 
   if (daaira && window.baladiyaMap[daaira]) {
     window.baladiyaMap[daaira].forEach(b => {
@@ -238,4 +238,5 @@ function updateBaladiya() {
   </script>
 </body>
 </html>
+
 
