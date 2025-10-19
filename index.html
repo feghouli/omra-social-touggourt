@@ -2,162 +2,69 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>:التحقق من رقم التعريف الوظيفي للموظف</title>
+  <title>التحقق من رقم التعريف الوظيفي للموظف</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-    }
-    
-    html, body {
-      height: 100%;
-    }
-    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Cairo', sans-serif;
       background: linear-gradient(135deg, #6a11cb, #2575fc);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 15px;
-      overflow-x: hidden;
-      margin: 0;
-      position: relative;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; padding: 15px; overflow-x: hidden; margin: 0; position: relative;
     }
-    
     body::before, body::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      animation: float 15s infinite linear;
-      z-index: 0;
+      content: ''; position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.15); animation: float 15s infinite linear; z-index: 0;
     }
-
-    body::before {
-      width: 300px; 
-      height: 300px; 
-      top: -50px; 
-      left: -50px;
-    }
-
-    body::after {
-      width: 200px; 
-      height: 200px; 
-      bottom: -50px; 
-      right: -50px;
-      animation-duration: 20s;
-    }
-
+    body::before { width: 300px; height: 300px; top: -50px; left: -50px; }
+    body::after { width: 200px; height: 200px; bottom: -50px; right: -50px; animation-duration: 20s; }
     @keyframes float {
       0% { transform: translateY(0) rotate(0deg); }
       50% { transform: translateY(-50px) rotate(180deg); }
       100% { transform: translateY(0) rotate(360deg); }
     }
-
     .container {
-      position: relative;
-      background: white;
-      padding: 35px 25px;
-      border-radius: 18px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      width: 100%;
-      max-width: 350px;
-      margin: 0 auto;
-      z-index: 1;
+      position: relative; background: white; padding: 35px 25px;
+      border-radius: 18px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      text-align: center; width: 100%; max-width: 350px; margin: 0 auto; z-index: 1;
     }
-
-    h2 {
-      margin-bottom: 20px;
-      font-weight: 700;
-      font-size: 22px;
-      color: #333;
+    h2 { margin-bottom: 20px; font-weight: 700; font-size: 22px; color: #333; }
+    input, select {
+      width: 100%; padding: 14px 18px; margin-bottom: 18px;
+      border-radius: 10px; border: 2px solid #e0e0e0;
+      font-size: 15px; text-align: center; transition: all 0.3s ease;
+      font-family: 'Cairo', sans-serif; font-weight: 500;
     }
-
-    input {
-      width: 100%;
-      padding: 14px 18px;
-      margin-bottom: 18px;
-      border-radius: 10px;
-      border: 2px solid #e0e0e0;
-      font-size: 15px;
-      text-align: center;
-      transition: all 0.3s ease;
-      font-family: 'Cairo', sans-serif;
-      font-weight: 500;
+    input:focus, select:focus {
+      outline: none; border-color: #2575fc; box-shadow: 0 0 0 3px rgba(37,117,252,0.1);
     }
-
-    input:focus {
-      outline: none;
-      border-color: #2575fc;
-      box-shadow: 0 0 0 3px rgba(37,117,252,0.1);
-    }
-
     button {
       background: linear-gradient(45deg, #6a11cb, #2575fc);
-      color: white;
-      border: none;
-      padding: 14px 0;
-      border-radius: 10px;
-      font-size: 15px;
-      cursor: pointer;
-      font-weight: 600;
-      width: 100%;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      color: white; border: none; padding: 14px 0; border-radius: 10px;
+      font-size: 15px; cursor: pointer; font-weight: 600; width: 100%;
+      transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       font-family: 'Cairo', sans-serif;
     }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-
+    button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
     @media (max-width: 768px) {
-      body::before, body::after {
-        animation: none !important;
-        background: rgba(255,255,255,0.08);
-      }
-      button:hover {
-        transform: none;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 12px;
-      }
-      .container {
-        padding: 25px 20px;
-        border-radius: 15px;
-      }
-      h2 {
-        font-size: 18px;
-      }
-      input, button {
-        font-size: 14px;
-      }
+      body::before, body::after { animation: none !important; background: rgba(255,255,255,0.08); }
+      button:hover { transform: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2>التحقق من الرقم التعريف الوظيفي للموظف</h2>
+  <div class="container" id="mainContainer">
+    <h2>التحقق من رقم التعريف الوظيفي للموظف</h2>
     <input type="text" id="empId" placeholder="أدخل رقم التعريف الوظيفي" oninput="validateNumber(this)">
     <button onclick="checkEmployee()">تحقق</button>
   </div>
 
   <script>
+    // إعدادات Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDLXP89rGzbTMCL8z33ETk1q7JYKsNo3jA",
       authDomain: "omra-c21a8.firebaseapp.com",
@@ -167,20 +74,18 @@
       appId: "1:345175863295:web:ac26e1ee0460db6c6041ca",
       measurementId: "G-RSMC9G22D6"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ✅ منع إدخال غير الأرقام وتحديد الطول الأقصى بـ 16 رقمًا
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxkfP7iKT53kLz85dmxV7KL4PvNk60FWgcmVxq4Qtj1ehZTYJM3cwarWf-7ng7omnKQ/exec";
+
     function validateNumber(input) {
-      input.value = input.value.replace(/\D/g, ''); // حذف أي شيء غير رقمي
-      if (input.value.length > 16) {
-        input.value = input.value.slice(0, 16); // قص الزائد بعد 16 رقم
-      }
+      input.value = input.value.replace(/\D/g, '');
+      if (input.value.length > 16) input.value = input.value.slice(0, 16);
     }
 
     async function checkEmployee() {
-      let empId = document.getElementById("empId").value.trim();
+      const empId = document.getElementById("empId").value.trim();
       if (empId.length !== 16) {
         Swal.fire("تنبيه", "رقم التعريف يجب أن يتكون من 16 رقمًا", "warning");
         return;
@@ -192,23 +97,144 @@
 
         if (docSnap.exists) {
           const data = docSnap.data();
+
           Swal.fire({
-            title: "✅ الموظف موجود",
-            html: `<b>الاسم:</b> ${data.name}<br><b>الرتبة:</b> ${data.grade}<br><b>مكان العمل:</b> ${data.place}`,
+            title: "✅ تم التحقق بنجاح",
+            html: `<b>الاسم واللقب:</b> ${data.name}<br><b>الرتبة:</b> ${data.grade}<br><b>مكان العمل:</b> ${data.place}`,
             icon: "success",
-            confirmButtonText: "الانتقال للتسجيل"
+            confirmButtonText: "متابعة التسجيل"
           }).then(() => {
-            window.location.href = "https://tally.so/r/nG2rRL";
+            showForm(empId, data);
           });
+
         } else {
           Swal.fire("❌ خطأ", "رقم الموظف غير موجود في قاعدة البيانات", "error");
         }
       } catch (err) {
-        console.error("خطأ:", err);
-        Swal.fire("خطأ", "حدث خطأ أثناء التحقق", "error");
+        console.error(err);
+        Swal.fire("خطأ", "حدث خطأ أثناء الاتصال بقاعدة البيانات", "error");
       }
     }
-  </script>
 
+    function showForm(empId, data) {
+  const container = document.getElementById("mainContainer");
+  container.innerHTML = `
+    <h2>استمارة التسجيل</h2>
+    <input type="text" id="empIdField" value="${empId}" readonly>
+    <input type="text" id="nameField" value="${data.name}" readonly>
+    <input type="text" id="gradeField" value="${data.grade}" readonly>
+    <input type="text" id="placeField" value="${data.place}" readonly>
+
+    <select id="daairaField" onchange="updateBaladiya()">
+      <option value="">اختر الدائرة</option>
+      <option value="توقرت">توقرت</option>
+      <option value="تماسين">تماسين</option>
+      <option value="المقارين">المقارين</option>
+      <option value="الحجيرة">الحجيرة</option>
+      <option value="الطيبات">الطيبات</option>
+    </select>
+
+    <select id="baladiyaField">
+      <option value="">اختر البلدية</option>
+    </select>
+
+    <input type="text" id="phoneField" placeholder="رقم الهاتف (10 أرقام)" oninput="validatePhone(this)">
+    <button onclick="submitForm()">تسجيل</button>
+  `;
+
+  // خرائط البلديات حسب الدائرة
+  window.baladiyaMap = {
+    "توقرت": ["توقرت", "النزلة", "تبسبست", "الزاوية العابدية"],
+    "تماسين": ["تماسين", "بلدة عمر"],
+    "المقارين": ["المقارين", "سيدي سليمان"],
+    "الحجيرة": ["الحجيرة", "العالية"],
+    "الطيبات": ["المنقر", "ابن ناصر"]
+  };
+}
+
+// تحديث قائمة البلدية عند اختيار الدائرة
+function updateBaladiya() {
+  const daaira = document.getElementById("daairaField").value;
+  const baladiyaSelect = document.getElementById("baladiyaField");
+
+  // مسح الخيارات القديمة
+  baladiyaSelect.innerHTML = '<option value="">اختر البلدية</option>';
+
+  if (daaira && window.baladiyaMap[daaira]) {
+    window.baladiyaMap[daaira].forEach(b => {
+      const option = document.createElement("option");
+      option.value = b;
+      option.text = b;
+      baladiyaSelect.add(option);
+    });
+  }
+}
+
+
+    function validatePhone(input) {
+      input.value = input.value.replace(/\D/g, '');
+      if (input.value.length > 10) input.value = input.value.slice(0, 10);
+    }
+
+    async function submitForm() {
+  const empId = document.getElementById("empIdField").value;
+  const name = document.getElementById("nameField").value;
+  const grade = document.getElementById("gradeField").value;
+  const place = document.getElementById("placeField").value;
+  const daaira = document.getElementById("daairaField").value.trim();
+  const baladiya = document.getElementById("baladiyaField").value.trim();
+  const phone = document.getElementById("phoneField").value.trim();
+  
+  if (phone.length !== 10) {
+    Swal.fire("تنبيه", "رقم الهاتف يجب أن يحتوي على 10 أرقام", "warning");
+    return;
+  }
+  if (!daaira || !baladiya) {
+    Swal.fire("تنبيه", "الرجاء إدخال دائرة وبلدية العمل", "warning");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("empId", empId);
+  formData.append("name", name);
+  formData.append("grade", grade);
+  formData.append("place", place);
+  formData.append("daaira", daaira);
+  formData.append("baladiya", baladiya);
+  formData.append("phone", phone);
+
+  try {
+    // إرسال البيانات إلى Google Apps Script
+    const res = await fetch(scriptURL, { method: "POST", body: formData });
+    const data = await res.json();
+
+    if (data.result === "success") {
+      Swal.fire("✅ تم التسجيل بنجاح", "تم تسجيل اسمك في قرعة العمرة بنجاح بالتوفيق إن شاء الله", "success")
+        .then(() => location.reload()); // إعادة الصفحة الأولى
+    } else if (data.result === "exists") {
+      const d = data.data;
+      Swal.fire({
+        title: "⚠️ التسجيل موجود مسبقًا",
+        html: `<b>رقم التعريف:</b> ${d.empId}<br>
+               <b>الاسم واللقب:</b> ${d.name}<br>
+               <b>الرتبة:</b> ${d.grade}<br>
+               <b>مكان العمل:</b> ${d.place}<br>
+               <b>الدائرة:</b> ${d.daaira}<br>
+               <b>البلدية:</b> ${d.baladiya}<br>
+               <b>الهاتف:</b> ${d.phone}`,
+        icon: "warning",
+        confirmButtonText: "حسنًا"
+      }).then(() => location.reload()); // إعادة الصفحة الأولى
+    } else {
+      Swal.fire("❌ خطأ", "تعذر إرسال البيانات", "error");
+    }
+
+  } catch (error) {
+    Swal.fire("❌ خطأ", "فشل الاتصال بخدمة التسجيل", "error");
+  }
+}
+
+
+  </script>
 </body>
 </html>
