@@ -176,6 +176,10 @@
     }
 
     async function submitForm() {
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = true; // تعطيل الزر فور الضغط
+  submitBtn.style.opacity = 0.6; // تغيير الشكل لتوضيح التعطيل
+
   const empId = document.getElementById("empIdField").value;
   const name = document.getElementById("nameField").value;
   const grade = document.getElementById("gradeField").value;
@@ -186,10 +190,14 @@
   
   if (phone.length !== 10) {
     Swal.fire("تنبيه", "رقم الهاتف يجب أن يحتوي على 10 أرقام", "warning");
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = 1;
     return;
   }
   if (!daaira || !baladiya) {
     Swal.fire("تنبيه", "الرجاء إدخال دائرة وبلدية العمل", "warning");
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = 1;
     return;
   }
 
@@ -243,15 +251,18 @@
       attempts++;
       if (attempts >= maxAttempts) {
         Swal.fire("❌ خطأ", "فشل الاتصال بخدمة التسجيل، حاول لاحقًا", "error");
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = 1;
         return;
       }
-      // الانتظار 1 ثانية قبل إعادة المحاولة
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
 }
 
+
   </script>
 </body>
 </html>
+
 
