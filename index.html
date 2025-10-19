@@ -71,7 +71,7 @@
 
   function validateNumber(input) {
     input.value = input.value.replace(/\D/g, '');
-    if (input.value.length > 16) input.value = input.value.slice(0, 16);
+    if (input.value.length > 14) input.value = input.value.slice(0, 16);
   }
 
   async function checkEmployee() {
@@ -236,6 +236,7 @@
 </script>
 </body>
 </html>
+
 
 
 
