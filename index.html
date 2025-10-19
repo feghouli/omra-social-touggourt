@@ -176,61 +176,82 @@
     }
 
     async function submitForm() {
-      const empId = document.getElementById("empIdField").value;
-      const name = document.getElementById("nameField").value;
-      const grade = document.getElementById("gradeField").value;
-      const place = document.getElementById("placeField").value;
-      const daaira = document.getElementById("daairaField").value.trim();
-      const baladiya = document.getElementById("baladiyaField").value.trim();
-      const phone = document.getElementById("phoneField").value.trim();
-      
-      if (phone.length !== 10) {
-        Swal.fire("تنبيه", "رقم الهاتف يجب أن يحتوي على 10 أرقام", "warning");
+  const empId = document.getElementById("empIdField").value;
+  const name = document.getElementById("nameField").value;
+  const grade = document.getElementById("gradeField").value;
+  const place = document.getElementById("placeField").value;
+  const daaira = document.getElementById("daairaField").value.trim();
+  const baladiya = document.getElementById("baladiyaField").value.trim();
+  const phone = document.getElementById("phoneField").value.trim();
+  
+  if (phone.length !== 10) {
+    Swal.fire("تنبيه", "رقم الهاتف يجب أن يحتوي على 10 أرقام", "warning");
+    return;
+  }
+  if (!daaira || !baladiya) {
+    Swal.fire("تنبيه", "الرجاء إدخال دائرة وبلدية العمل", "warning");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("empId", empId);
+  formData.append("name", name);
+  formData.append("grade", grade);
+  formData.append("place", place);
+  formData.append("daaira", daaira);
+  formData.append("baladiya", baladiya);
+  formData.append("phone", phone);
+
+  Swal.fire({
+    title: 'جاري تسجيل البيانات...',
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading()
+  });
+
+  let attempts = 0;
+  const maxAttempts = 3;
+
+  while (attempts < maxAttempts) {
+    try {
+      const res = await fetch(scriptURL, { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (data.result === "success") {
+        Swal.fire("✅ تم التسجيل بنجاح", "تم تسجيل اسمك في قرعة العمرة بنجاح بالتوفيق إن شاء الله", "success")
+          .then(() => location.reload());
+        return;
+      } else if (data.result === "exists") {
+        const d = data.data;
+        Swal.fire({
+          title: "⚠️ التسجيل موجود مسبقًا",
+          html: `<b>رقم التعريف:</b> ${d.empId}<br>
+                 <b>الاسم واللقب:</b> ${d.name}<br>
+                 <b>الرتبة:</b> ${d.grade}<br>
+                 <b>مكان العمل:</b> ${d.place}<br>
+                 <b>دائرة العمل:</b> ${d.daaira}<br>
+                 <b>بلدية العمل:</b> ${d.baladiya}<br>
+                 <b> رقم الهاتف:</b> ${d.phone}`,
+          icon: "warning",
+          confirmButtonText: "حسنًا"
+        }).then(() => location.reload());
+        return;
+      } else {
+        throw new Error("تعذر إرسال البيانات");
+      }
+
+    } catch (error) {
+      attempts++;
+      if (attempts >= maxAttempts) {
+        Swal.fire("❌ خطأ", "فشل الاتصال بخدمة التسجيل، حاول لاحقًا", "error");
         return;
       }
-      if (!daaira || !baladiya) {
-        Swal.fire("تنبيه", "الرجاء إدخال دائرة وبلدية العمل", "warning");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("empId", empId);
-      formData.append("name", name);
-      formData.append("grade", grade);
-      formData.append("place", place);
-      formData.append("daaira", daaira);
-      formData.append("baladiya", baladiya);
-      formData.append("phone", phone);
-
-      try {
-        const res = await fetch(scriptURL, { method: "POST", body: formData });
-        const data = await res.json();
-
-        if (data.result === "success") {
-          Swal.fire("✅ تم التسجيل بنجاح", "تم تسجيل اسمك في قرعة العمرة بنجاح بالتوفيق إن شاء الله", "success")
-            .then(() => location.reload());
-        } else if (data.result === "exists") {
-          const d = data.data;
-          Swal.fire({
-            title: "⚠️ التسجيل موجود مسبقًا",
-            html: `<b>رقم التعريف:</b> ${d.empId}<br>
-                   <b>الاسم واللقب:</b> ${d.name}<br>
-                   <b>الرتبة:</b> ${d.grade}<br>
-                   <b>مكان العمل:</b> ${d.place}<br>
-                   <b>دائرة العمل:</b> ${d.daaira}<br>
-                   <b>بلدية العمل:</b> ${d.baladiya}<br>
-                   <b> رقم الهاتف:</b> ${d.phone}`,
-            icon: "warning",
-            confirmButtonText: "حسنًا"
-          }).then(() => location.reload());
-        } else {
-          Swal.fire("❌ خطأ", "تعذر إرسال البيانات", "error");
-        }
-
-      } catch (error) {
-        Swal.fire("❌ خطأ", "فشل الاتصال بخدمة التسجيل", "error");
-      }
+      // الانتظار 1 ثانية قبل إعادة المحاولة
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
+  }
+}
+
   </script>
 </body>
 </html>
+
