@@ -71,15 +71,20 @@
 
   function validateNumber(input) {
     input.value = input.value.replace(/\D/g, '');
-    if (input.value.length > 14) input.value = input.value.slice(0, 16);
+    if (input.value.length > 16) input.value = input.value.slice(0, 16);
   }
 
   async function checkEmployee() {
     const empId = document.getElementById("empId").value.trim();
-    if (empId.length !== 16) {
-      Swal.fire("تنبيه", "رقم التعريف يجب أن يتكون من 16 رقمًا", "warning");
-      return;
-    }
+   if (empId.length < 15 || empId.length > 16) {
+    Swal.fire({
+        icon: 'error',
+        title: 'خطأ',
+        text: 'رقم التعريف الوظيفي يجب أن يكون من 15 أو 16 رقمًا'
+    });
+    return;
+}
+
 
     try {
       const docRef = db.collection("employees").doc(empId);
@@ -231,6 +236,7 @@
 </script>
 </body>
 </html>
+
 
 
 
