@@ -41,7 +41,8 @@
     input:focus, select:focus {
       outline: none; border-color: #2575fc; box-shadow: 0 0 0 3px rgba(37,117,252,0.1);
     }
-    /* تثبيت حقل رقم التعريف: بدون أي حركة */
+
+    /* تثبيت حقل رقم التعريف */
     #empId {
       transition: none !important;
       box-shadow: none !important;
@@ -52,6 +53,7 @@
       outline: none;
       border-color: #e0e0e0;
     }
+
     button {
       background: linear-gradient(45deg, #6a11cb, #2575fc);
       color: white; border: none; padding: 14px 0; border-radius: 10px;
@@ -60,9 +62,21 @@
       font-family: 'Cairo', sans-serif;
     }
     button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+    /* تعطيل أي حركة على الهاتف */
     @media (max-width: 768px) {
       body::before, body::after { animation: none !important; background: rgba(255,255,255,0.08); }
       button:hover { transform: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+      #empId {
+        transition: none !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      #empId:focus {
+        outline: none;
+        border-color: #e0e0e0;
+      }
     }
   </style>
 </head>
@@ -75,7 +89,6 @@
   </div>
 
   <script>
-    // إعدادات Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDLXP89rGzbTMCL8z33ETk1q7JYKsNo3jA",
       authDomain: "omra-c21a8.firebaseapp.com",
@@ -87,7 +100,6 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     const scriptURL = "https://script.google.com/macros/s/AKfycbxkfP7iKT53kLz85dmxV7KL4PvNk60FWgcmVxq4Qtj1ehZTYJM3cwarWf-7ng7omnKQ/exec";
 
     function validateNumber(input) {
@@ -108,15 +120,12 @@
 
         if (docSnap.exists) {
           const data = docSnap.data();
-
           Swal.fire({
             title: "✅ تم التحقق بنجاح",
             html: `<b>الاسم واللقب:</b> ${data.name}<br><b>الرتبة:</b> ${data.grade}<br><b>مكان العمل:</b> ${data.place}`,
             icon: "success",
             confirmButtonText: "متابعة التسجيل"
-          }).then(() => {
-            showForm(empId, data);
-          });
+          }).then(() => showForm(empId, data));
 
         } else {
           Swal.fire("❌ خطأ", "رقم الموظف غير موجود في قاعدة البيانات", "error");
@@ -152,7 +161,6 @@
         <input type="text" id="phoneField" placeholder="رقم الهاتف (10 أرقام)" oninput="validatePhone(this)">
         <button id="submitBtn" onclick="submitForm()">تسجيل</button>
       `;
-
       window.baladiyaMap = {
         "توقرت": ["توقرت", "النزلة", "تبسبست", "الزاوية العابدية"],
         "تماسين": ["تماسين", "بلدة عمر"],
@@ -166,7 +174,6 @@
       const daaira = document.getElementById("daairaField").value;
       const baladiyaSelect = document.getElementById("baladiyaField");
       baladiyaSelect.innerHTML = '<option value="">اختر بلدية العمل</option>';
-
       if (daaira && window.baladiyaMap[daaira]) {
         window.baladiyaMap[daaira].forEach(b => {
           const option = document.createElement("option");
